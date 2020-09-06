@@ -121,7 +121,7 @@ if [ ! "$SKIP_INSTALL" ]; then
 
     mcount "version.python.$PYTHON_VERSION"
 
-    if ! tar zxv -C .heroku/python -f $CACHE_DIR/python-2.7.18.tar.gz &> /dev/null; then
+    if ! tar zxv -C .heroku/python -f $CACHE_DIR/python.tar.gz &> /dev/null; then
       puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
       puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
       exit 1
@@ -163,7 +163,7 @@ PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py2.py3-none-any.whl"
 PIP_WHEEL_URL="https://lang-python.s3.amazonaws.com/common/${PIP_WHEEL_FILENAME}"
 PIP_WHEEL="${TMPDIR:-/tmp}/${PIP_WHEEL_FILENAME}"
 
-if ! curl -sSf "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
+if ! cp $CACHE_DIR/pip.whl "$PIP_WHEEL"; then
   mcount "failure.python.download-pip"
   puts-warn "Failed to download pip"
   exit 1
