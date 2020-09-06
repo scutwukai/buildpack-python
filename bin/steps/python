@@ -181,7 +181,7 @@ fi
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 
-/app/.heroku/python/bin/python "${PIP_WHEEL}/pip" install --quiet --disable-pip-version-check --no-cache \
+/app/.heroku/python/bin/python "${PIP_WHEEL}/pip" -i https://pypi.tuna.tsinghua.edu.cn/simple install --quiet --disable-pip-version-check --no-cache \
   "${PIP_TO_INSTALL}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}"
 
 hash -r
