@@ -4,8 +4,6 @@
 source "$BIN_DIR/utils"
 
 sqlite3_install() {
-  cp $CACHE_DIR/sources.list /etc/apt/sources.list
-
   HEROKU_PYTHON_DIR="$1"
   HEADERS_ONLY="$3"
 
@@ -20,7 +18,7 @@ sqlite3_install() {
   APT_OPTIONS="-o debug::nolocking=true"
   APT_OPTIONS="$APT_OPTIONS -o dir::cache=$APT_CACHE_DIR"
   APT_OPTIONS="$APT_OPTIONS -o dir::state=$APT_STATE_DIR"
-  APT_OPTIONS="$APT_OPTIONS -o dir::etc::sourcelist=/etc/apt/sources.list"
+  APT_OPTIONS="$APT_OPTIONS -o dir::etc::sourcelist=$CACHE_DIR/sources.list"
 
   apt-get $APT_OPTIONS update > /dev/null 2>&1
   if [ -z "$HEADERS_ONLY" ]; then
