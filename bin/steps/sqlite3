@@ -4,6 +4,8 @@
 source "$BIN_DIR/utils"
 
 sqlite3_install() {
+  cp $CACHE_DIR/sources.list /etc/apt/sources.list
+
   HEROKU_PYTHON_DIR="$1"
   HEADERS_ONLY="$3"
 
