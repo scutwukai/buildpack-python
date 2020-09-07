@@ -121,7 +121,8 @@ if [ ! "$SKIP_INSTALL" ]; then
 
     mcount "version.python.$PYTHON_VERSION"
 
-    if ! curl "${VENDORED_PYTHON}" -s | tar zxv -C .heroku/python &> /dev/null; then
+    # use local python tar file cache
+    if ! tar zxv -C .heroku/python -f $CACHE_DIR/python.tar.gz &> /dev/null; then
       puts-warn "Requested runtime ($PYTHON_VERSION) is not available for this stack ($STACK)."
       puts-warn "Aborting.  More info: https://devcenter.heroku.com/articles/python-support"
       exit 1
@@ -163,7 +164,8 @@ PIP_WHEEL_FILENAME="pip-${PIP_VERSION}-py2.py3-none-any.whl"
 PIP_WHEEL_URL="https://lang-python.s3.amazonaws.com/common/${PIP_WHEEL_FILENAME}"
 PIP_WHEEL="${TMPDIR:-/tmp}/${PIP_WHEEL_FILENAME}"
 
-if ! curl -sSf "${PIP_WHEEL_URL}" -o "$PIP_WHEEL"; then
+# use local pip wheel file cache
+if ! cp $CACHE_DIR/pip.whl "$PIP_WHEEL"; then
   mcount "failure.python.download-pip"
   puts-warn "Failed to download pip"
   exit 1
@@ -181,7 +183,7 @@ fi
 
 puts-step "Installing pip ${PIP_VERSION}, setuptools ${SETUPTOOLS_VERSION} and wheel ${WHEEL_VERSION}"
 
-/app/.heroku/python/bin/python "${PIP_WHEEL}/pip" install --quiet --disable-pip-version-check --no-cache \
+/app/.heroku/python/bin/python "${PIP_WHEEL}/pip" install -i ${PYPI_MIRROR} --quiet --disable-pip-version-check --no-cache \
   "${PIP_TO_INSTALL}" "setuptools==${SETUPTOOLS_VERSION}" "wheel==${WHEEL_VERSION}"
 
 hash -r

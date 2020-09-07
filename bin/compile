@@ -49,6 +49,10 @@ elif [[ -n ${USE_STAGING_BINARIES} ]]; then
 fi
 export VENDOR_URL
 
+# Set pypi mirror
+PYPI_MIRROR="https://mirrors.cloud.tencent.com/pypi/simple"
+export PYPI_MIRROR
+
 # Default Python Versions
 # shellcheck source=bin/default_pythons
 source "$BIN_DIR/default_pythons"
@@ -280,7 +284,8 @@ source "$BIN_DIR/steps/gdal"
 (( start=$(nowms) ))
 # shellcheck source=bin/steps/sqlite3
 source "$BIN_DIR/steps/sqlite3"
-buildpack_sqlite3_install
+# disable sqlite to speed up building
+#buildpack_sqlite3_install
 mtime "sqlite3.install.time" "${start}"
 
 # pip install
